@@ -362,7 +362,10 @@
    * Creates a new context using the given view with this context
    * as the parent.
    */
-  Context.prototype.push = function push (view) {
+  Context.prototype.push = function push (view, index) {
+    if(!isNaN(index) && typeof(view) === "object"){
+      view.__index = index;
+    }
     return new Context(view, this);
   };
 
@@ -514,7 +517,7 @@
 
     if (isArray(value)) {
       for (var j = 0, valueLength = value.length; j < valueLength; ++j) {
-        buffer += this.renderTokens(token[4], context.push(value[j]), partials, originalTemplate);
+        buffer += this.renderTokens(token[4], context.push(value[j], j), partials, originalTemplate);
       }
     } else if (typeof value === 'object' || typeof value === 'string' || typeof value === 'number') {
       buffer += this.renderTokens(token[4], context.push(value), partials, originalTemplate);
